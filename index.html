@@ -175,6 +175,8 @@ table.list-tbl tr:hover td{background:#fffaf7;cursor:pointer;}
 .modal-btns button{flex:1;padding:10px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;}
 .mbtn-close{background:#f0f2f5;color:#444;}
 .mbtn-del{background:#ffecec;color:#c00;}
+.btn-clear-all{background:#ffecec;color:#c00;border:1.5px solid #ffb3b3;border-radius:7px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;}
+.btn-clear-all:hover{background:#c00;color:#fff;border-color:#c00;}
 .mbtn-new{background:#f97316;color:#fff;}
 
 /* ═══════════════════════════════
@@ -382,6 +384,7 @@ table.list-tbl tr:hover td{background:#fffaf7;cursor:pointer;}
         <button class="nav-btn" onclick="nextMonth()">&#8594;</button>
         <button class="nav-btn active" id="btnCal" onclick="setView('cal')">&#128197; Calendar</button>
         <button class="nav-btn" id="btnList" onclick="setView('list')">&#9776; List</button>
+        <button class="btn-clear-all" onclick="clearAllData()">&#x1F5D1; Clear All</button>
       </div>
     </div>
 
@@ -636,17 +639,6 @@ var calView  = 'cal';
 var MONTHS   = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 var selectedInvNo = null;
 
-function seedDemo() {
-  if (getInvoices().length > 0) return;
-  saveInvoices([
-    {invno:'001/06/001',date:'2026-06-16',name:'Ali Raza',cnic:'35202-1234567-1',contact:'0300-1234567',address:'Lahore',dest:'Naran Kaghan',dur:'3 Days & 2 Nights',from:'Lahore',depdate:'2026-06-18',tourists:'Family (4)',total:'80000',adv:'20000'},
-    {invno:'002/06/002',date:'2026-06-17',name:'Sara Khan',cnic:'35202-7654321-2',contact:'0321-9876543',address:'Karachi',dest:'Swat Valley',dur:'4 Days & 3 Nights',from:'Karachi',depdate:'2026-06-20',tourists:'Couple',total:'60000',adv:'15000'},
-    {invno:'003/06/003',date:'2026-06-19',name:'Umar Farooq',cnic:'35202-1111111-3',contact:'0333-1112233',address:'Islamabad',dest:'Hunza',dur:'6 Days & 5 Nights',from:'Islamabad',depdate:'2026-06-22',tourists:'Group (8)',total:'200000',adv:'50000'},
-    {invno:'004/06/004',date:'2026-06-20',name:'Fatima Malik',cnic:'35202-2222222-4',contact:'0345-5554443',address:'Lahore',dest:'Skardu',dur:'5 Days & 4 Nights',from:'Lahore',depdate:'2026-06-25',tourists:'Couple',total:'90000',adv:'30000'},
-    {invno:'026/06/011',date:'2026-06-16',name:'Ahmad Hassan',cnic:'33202-2618534-3',contact:'',address:'Sahiwal',dest:'Naran Kaghan',dur:'3 Days & 2 Nights',from:'Sahiwal',depdate:'2026-06-18',tourists:'Couple',total:'40000',adv:'5000'}
-  ]);
-}
-
 function renderStats() {
   var invs  = getInvoices();
   var today = new Date().toISOString().split('T')[0];
@@ -812,6 +804,12 @@ function modalBgClick(e) {
   if (e.target === document.getElementById('modalBg')) closeModal();
 }
 
+function clearAllData() {
+  if (!confirm("Delete ALL invoices? This cannot be undone.")) return;
+  localStorage.removeItem("ga_invoices");
+  refreshManager();
+}
+
 function deleteInvoice() {
   if (!selectedInvNo) return;
   if (!confirm('Delete invoice ' + selectedInvNo + '? This cannot be undone.')) return;
@@ -832,7 +830,6 @@ function editInvoice() {
 // ============================================================
 // INIT
 // ============================================================
-//seedDemo();
 generateInvoice();
 scaleInvoice();
 </script>
